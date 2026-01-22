@@ -62,7 +62,7 @@ label {
 /* Button - black default, green on hover */
 .stButton > button {
     background-color: black;
-    color: white !important;
+    color: black !important;
     font-size: 18px;
     padding: 0.6rem 2.5rem;
     border-radius: 10px;
@@ -177,3 +177,4 @@ if submit:
             <p>No suspicious behavior detected.</p>
         </div>
         """, unsafe_allow_html=True)
+
