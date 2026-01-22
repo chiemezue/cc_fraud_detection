@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 # =============================
-# Custom CSS (Fintech UI)
+# Custom CSS (Enhanced Readability)
 # =============================
 st.markdown("""
 <style>
@@ -21,18 +21,21 @@ st.markdown("""
     color: white;
 }
 
+/* Titles */
 .title {
     text-align: center;
     font-size: 2.8rem;
     font-weight: 700;
+    color: white;
 }
 
 .subtitle {
     text-align: center;
-    color: #d1d5db;
+    color: #e5e7eb;
     margin-bottom: 2rem;
 }
 
+/* Card */
 .card {
     background: rgba(255,255,255,0.08);
     padding: 2rem;
@@ -40,6 +43,23 @@ st.markdown("""
     box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
+/* Input labels */
+label {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+}
+
+/* Section headers */
+.section-header {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-top: 1.5rem;
+    margin-bottom: 0.8rem;
+}
+
+/* Button */
 .stButton > button {
     background: linear-gradient(90deg, #22c55e, #16a34a);
     color: white;
@@ -49,6 +69,7 @@ st.markdown("""
     border: none;
 }
 
+/* Result cards */
 .fraud {
     border-left: 6px solid #ef4444;
     background: rgba(239,68,68,0.15);
@@ -75,21 +96,18 @@ scaler = joblib.load("scaler.pkl")
 # Header
 # =============================
 st.markdown("<div class='title'>💳 Credit Card Fraud Detection</div>", unsafe_allow_html=True)
-st.markdown("<div class='subtitle'>ML-powered real-time transaction risk analysis</div>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>Machine-Learning Powered Transaction Risk Analysis</div>", unsafe_allow_html=True)
 
 # =============================
 # Sidebar
 # =============================
-st.sidebar.title("📊 Model Info")
+st.sidebar.title("📊 Model Information")
 st.sidebar.write("""
 • Algorithm: **XGBoost**  
-• Dataset: Credit Card Transactions  
+• Input Features: **30**  
 • Scaling: **StandardScaler**  
-• Fraud is extremely rare (<0.2%)
+• Fraud Rate: **~0.17%**
 """)
-
-st.sidebar.markdown("---")
-st.sidebar.write("🧠 Inputs are automatically scaled before prediction")
 
 # =============================
 # Input Card
@@ -97,15 +115,16 @@ st.sidebar.write("🧠 Inputs are automatically scaled before prediction")
 st.markdown("<div class='card'>", unsafe_allow_html=True)
 
 with st.form("fraud_form"):
-    st.subheader("🧾 Transaction Details")
+    st.markdown("<div class='section-header'>🧾 Core Transaction Details</div>", unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
     with col1:
-        time = st.number_input("⏱ Time", min_value=0.0)
+        time = st.number_input("Transaction Time (seconds since first transaction)", min_value=0.0)
     with col2:
-        amount = st.number_input("💰 Amount", min_value=0.0)
+        amount = st.number_input("Transaction Amount ($)", min_value=0.0)
 
-    st.markdown("### 🔢 PCA Features (V1 – V28)")
+    st.markdown("<div class='section-header'>🔢 PCA Encoded Features</div>", unsafe_allow_html=True)
+    st.caption("These features are anonymized representations used by the fraud detection model.")
 
     v_inputs = []
 
@@ -114,7 +133,10 @@ with st.form("fraud_form"):
         for j in range(4):
             idx = i + j + 1
             v_inputs.append(
-                cols[j].number_input(f"V{idx}", value=0.0)
+                cols[j].number_input(
+                    f"PCA Feature V{idx}",
+                    value=0.0
+                )
             )
 
     submit = st.form_submit_button("🔍 Analyze Transaction")
@@ -138,7 +160,7 @@ if submit:
         <div class="fraud">
             <h2>🚨 Fraud Detected</h2>
             <p><b>Risk Probability:</b> {probability:.2%}</p>
-            <p>This transaction shows strong fraud indicators.</p>
+            <p>This transaction exhibits strong fraud patterns.</p>
         </div>
         """, unsafe_allow_html=True)
     else:
@@ -146,6 +168,6 @@ if submit:
         <div class="safe">
             <h2>✅ Legitimate Transaction</h2>
             <p><b>Fraud Probability:</b> {probability:.2%}</p>
-            <p>No suspicious activity detected.</p>
+            <p>No suspicious behavior detected.</p>
         </div>
         """, unsafe_allow_html=True)
