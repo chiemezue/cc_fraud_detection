@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 # =============================
-# Custom CSS (Enhanced Readability)
+# Custom CSS
 # =============================
 st.markdown("""
 <style>
@@ -62,7 +62,7 @@ label {
 /* Button - black default, green on hover */
 .stButton > button {
     background-color: black;
-    color: black !important;
+    color: white !important;
     font-size: 18px;
     padding: 0.6rem 2.5rem;
     border-radius: 10px;
@@ -124,26 +124,22 @@ with st.form("fraud_form"):
 
     col1, col2 = st.columns(2)
     with col1:
-        time = st.number_input("Transaction Time (seconds since first transaction)", min_value=0.0, format="%.6f")
+        time_str = st.text_input("Transaction Time (seconds since first transaction)", placeholder="e.g., 12345.678901")
+        time = float(time_str) if time_str else 0.0
     with col2:
-        amount = st.number_input("Transaction Amount ($)", min_value=0.0, format="%.6f")
+        amount_str = st.text_input("Transaction Amount ($)", placeholder="e.g., 250.123456")
+        amount = float(amount_str) if amount_str else 0.0
 
     st.markdown("<div class='section-header'>🔢 PCA Encoded Features</div>", unsafe_allow_html=True)
     st.caption("These features are anonymized representations used by the fraud detection model.")
 
     v_inputs = []
-
     for i in range(0, 28, 4):
         cols = st.columns(4)
         for j in range(4):
             idx = i + j + 1
-            v_inputs.append(
-                cols[j].number_input(
-                    f"PCA Feature V{idx}",
-                    value=0.0,
-                    format="%.6f"
-                )
-            )
+            val_str = cols[j].text_input(f"PCA Feature V{idx}", placeholder="0.0")
+            v_inputs.append(float(val_str) if val_str else 0.0)
 
     submit = st.form_submit_button("🔍 Analyze Transaction")
 
@@ -177,4 +173,3 @@ if submit:
             <p>No suspicious behavior detected.</p>
         </div>
         """, unsafe_allow_html=True)
-
