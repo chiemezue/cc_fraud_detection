@@ -59,17 +59,18 @@ label {
     margin-bottom: 0.8rem;
 }
 
-/* Button */
+/* Button - black default, green on hover */
 .stButton > button {
-    background: linear-gradient(90deg, #22c55e, #16a34a);
+    background-color: black;
     color: white !important;
     font-size: 18px;
     padding: 0.6rem 2.5rem;
     border-radius: 10px;
     border: none;
+    transition: all 0.3s ease;
 }
 .stButton > button:hover {
-    background: linear-gradient(90deg, #16a34a, #22c55e);
+    background: linear-gradient(90deg, #22c55e, #16a34a);
     color: white !important;
 }
 
